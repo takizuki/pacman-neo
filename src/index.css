@@ -4,3 +4,16 @@
   --font-sans: "Helvetica Neue", Arial, sans-serif;
   --font-mono: "Courier New", monospace;
 }
+
+@layer base {
+  * {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    user-select: none;
+    outline: none;
+  }
+
+  input, textarea {
+    user-select: text;
+  }
+}

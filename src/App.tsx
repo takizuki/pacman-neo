@@ -322,6 +322,21 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    const preventDefault = (e: MouseEvent | TouchEvent) => {
+      // Allow default only for inputs if any were added later
+      if ((e.target as HTMLElement).tagName === 'INPUT' || (e.target as HTMLElement).tagName === 'TEXTAREA') return;
+      
+      // Prevent context menu (long press)
+      if (e.type === 'contextmenu') e.preventDefault();
+    };
+
+    window.addEventListener('contextmenu', preventDefault);
+    return () => {
+      window.removeEventListener('contextmenu', preventDefault);
+    };
+  }, []);
+
+  useEffect(() => {
     if (gameState === 'PLAYING') {
       lastTimeRef.current = performance.now();
       frameRef.current = requestAnimationFrame(update);
