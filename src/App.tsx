@@ -335,28 +335,28 @@ export default function App() {
     <div className="h-screen w-screen bg-[#0f0c29] bg-[linear-gradient(135deg,#0f0c29_0%,#302b63_50%,#24243e_100%)] text-white font-sans selection:bg-[#00d2ff]/30 flex flex-col xl:flex-row overflow-hidden fixed inset-0">
       
       {/* Sidebar - Stats & Controls (Desktop) / Header (Mobile) */}
-      <aside className="w-full xl:w-[320px] h-auto xl:h-full flex flex-col p-2 xl:p-10 gap-4 xl:gap-6 z-10 shrink-0">
-        <div className="bg-white/10 backdrop-blur-[20px] border border-white/15 rounded-xl xl:rounded-[24px] p-3 xl:p-6 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]">
+      <aside className="w-full xl:w-[320px] h-auto xl:h-full flex flex-col p-1 xl:p-10 gap-2 xl:gap-6 z-10 shrink-0">
+        <div className="bg-white/10 backdrop-blur-[20px] border border-white/15 rounded-xl xl:rounded-[24px] p-2 xl:p-6 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]">
           <header className="flex xl:block items-center justify-between">
-            <div>
-              <h1 className="text-xl xl:text-4xl font-black tracking-tighter italic uppercase text-transparent bg-clip-text bg-gradient-to-r from-[#f1f500] to-white">
+            <div className="flex flex-col">
+              <h1 className="text-xl xl:text-4xl font-black tracking-tighter italic uppercase text-transparent bg-clip-text bg-gradient-to-r from-[#f1f500] to-white leading-none">
                 PAC-NEO
               </h1>
               <p className="text-white/40 font-mono text-[7px] xl:text-[9px] uppercase tracking-[0.3em] mt-0.5 xl:mt-1">Next Gen Arcade</p>
             </div>
             
-            <div className="xl:hidden flex items-center gap-4">
-              <div className="text-right flex items-center gap-3">
+            <div className="xl:hidden flex items-center gap-3">
+              <div className="text-right flex items-center gap-2">
                 <div className="flex flex-col">
-                  <p className="text-[8px] uppercase tracking-[1px] text-white/50 leading-none mb-1">Score</p>
-                  <p className="text-lg font-mono font-bold leading-none">{score.toLocaleString()}</p>
+                  <p className="text-[7px] uppercase tracking-[1px] text-white/50 leading-none mb-0.5">Score</p>
+                  <p className="text-base font-mono font-bold leading-none">{score.toLocaleString()}</p>
                 </div>
-                <div className="h-6 w-px bg-white/10" />
+                <div className="h-4 w-px bg-white/10" />
                 <div className="flex flex-col items-center">
-                  <p className="text-[8px] uppercase tracking-[1px] text-white/50 leading-none mb-1">Lives</p>
+                  <p className="text-[7px] uppercase tracking-[1px] text-white/50 leading-none mb-0.5">Lives</p>
                   <div className="flex gap-1">
                     {Array.from({ length: 3 }).map((_, i) => (
-                      <div key={i} className={`w-2.5 h-2.5 rounded-full ${i < lives ? "bg-[#f1f500]" : "bg-white/10"}`} style={{ clipPath: 'polygon(100% 0, 100% 40%, 50% 50%, 100% 60%, 100% 100%, 0 100%, 0 0)' }} />
+                      <div key={i} className={`w-2 h-2 rounded-full ${i < lives ? "bg-[#f1f500]" : "bg-white/10"}`} style={{ clipPath: 'polygon(100% 0, 100% 40%, 50% 50%, 100% 60%, 100% 100%, 0 100%, 0 0)' }} />
                     ))}
                   </div>
                 </div>
@@ -425,7 +425,7 @@ export default function App() {
       </aside>
 
       {/* Main Game Viewport */}
-      <main className="flex-1 relative flex flex-col items-center justify-center p-1 xl:p-10 overflow-hidden">
+      <main className="flex-1 relative flex flex-col items-center justify-start xl:justify-center pt-2 xl:pt-10 overflow-hidden">
         {/* Mobile Stats Bar - Removed redundant bar, consolidated into header above */}
         
         {/* Background Decorative Rings */}
@@ -435,7 +435,7 @@ export default function App() {
         <motion.div 
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="relative scale-[0.65] xs:scale-75 sm:scale-90 md:scale-100"
+          className="w-full max-w-[456px] px-2"
         >
           {/* Maze Container */}
           <div className="relative p-2 xl:p-6 bg-black/40 border-2 xl:border-4 border-[#00d2ff] rounded-xl shadow-[0_0_40px_rgba(0,210,255,0.2)]">
@@ -443,7 +443,7 @@ export default function App() {
               ref={canvasRef}
               width={GRID_WIDTH * CELL_SIZE}
               height={GRID_HEIGHT * CELL_SIZE}
-              className="block max-h-[60vh] xl:max-h-none h-auto w-auto"
+              className="block w-full h-auto max-h-[50vh] xl:max-h-none"
             />
 
             <AnimatePresence>
@@ -513,33 +513,33 @@ export default function App() {
         </motion.div>
 
         {/* Mobile D-Pad Controls */}
-        <div className="xl:hidden grid grid-cols-3 gap-2 mt-4 z-10 scale-90">
+        <div className="xl:hidden grid grid-cols-3 gap-2 mt-2 z-10 scale-[0.85]">
           <div />
           <button 
-            className="w-12 h-12 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl flex items-center justify-center active:bg-[#f1f500] active:text-black transition-all shadow-lg active:scale-95 touch-none"
+            className="w-11 h-11 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl flex items-center justify-center active:bg-[#f1f500] active:text-black transition-all shadow-lg active:scale-95 touch-none"
             onTouchStart={(e) => { e.preventDefault(); pacmanRef.current.nextDir = 'UP'; }}
           >
-            <ChevronUp size={28} />
+            <ChevronUp size={24} />
           </button>
           <div />
           
           <button 
-            className="w-12 h-12 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl flex items-center justify-center active:bg-[#f1f500] active:text-black transition-all shadow-lg active:scale-95 touch-none"
+            className="w-11 h-11 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl flex items-center justify-center active:bg-[#f1f500] active:text-black transition-all shadow-lg active:scale-95 touch-none"
             onTouchStart={(e) => { e.preventDefault(); pacmanRef.current.nextDir = 'LEFT'; }}
           >
-            <ChevronLeft size={28} />
+            <ChevronLeft size={24} />
           </button>
           <button 
-            className="w-12 h-12 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl flex items-center justify-center active:bg-[#f1f500] active:text-black transition-all shadow-lg active:scale-95 touch-none"
+            className="w-11 h-11 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl flex items-center justify-center active:bg-[#f1f500] active:text-black transition-all shadow-lg active:scale-95 touch-none"
             onTouchStart={(e) => { e.preventDefault(); pacmanRef.current.nextDir = 'DOWN'; }}
           >
-            <ChevronDown size={28} />
+            <ChevronDown size={24} />
           </button>
           <button 
-            className="w-12 h-12 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl flex items-center justify-center active:bg-[#f1f500] active:text-black transition-all shadow-lg active:scale-95 touch-none"
+            className="w-11 h-11 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl flex items-center justify-center active:bg-[#f1f500] active:text-black transition-all shadow-lg active:scale-95 touch-none"
             onTouchStart={(e) => { e.preventDefault(); pacmanRef.current.nextDir = 'RIGHT'; }}
           >
-            <ChevronRight size={28} />
+            <ChevronRight size={24} />
           </button>
         </div>
       </main>
