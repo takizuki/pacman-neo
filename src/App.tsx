@@ -5,7 +5,7 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Trophy, RotateCcw, Play, Skull, Star, Keyboard } from 'lucide-react';
+import { Trophy, RotateCcw, Play, Skull, Star, Keyboard, ChevronUp, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
 
 // --- Constants ---
 const CELL_SIZE = 24;
@@ -332,19 +332,28 @@ export default function App() {
   }, [gameState, board]);
 
   return (
-    <div className="min-h-screen bg-[#0f0c29] bg-[linear-gradient(135deg,#0f0c29_0%,#302b63_50%,#24243e_100%)] text-white font-sans selection:bg-[#00d2ff]/30 flex overflow-hidden">
+    <div className="h-screen w-screen bg-[#0f0c29] bg-[linear-gradient(135deg,#0f0c29_0%,#302b63_50%,#24243e_100%)] text-white font-sans selection:bg-[#00d2ff]/30 flex flex-col xl:flex-row overflow-hidden fixed inset-0">
       
-      {/* Sidebar - Stats & Controls */}
-      <aside className="w-[320px] h-screen flex flex-col p-10 gap-6 z-10 shrink-0">
-        <div className="bg-white/10 backdrop-blur-[20px] border border-white/15 rounded-[24px] p-6 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]">
-          <header className="mb-6">
-            <h1 className="text-4xl font-black tracking-tighter italic uppercase text-transparent bg-clip-text bg-gradient-to-r from-[#f1f500] to-white">
-              PAC-NEO
-            </h1>
-            <p className="text-white/40 font-mono text-[9px] uppercase tracking-[0.3em] mt-1">Next Gen Arcade</p>
+      {/* Sidebar - Stats & Controls (Desktop) / Header (Mobile) */}
+      <aside className="w-full xl:w-[320px] h-auto xl:h-full flex flex-col p-4 xl:p-10 gap-4 xl:gap-6 z-10 shrink-0">
+        <div className="bg-white/10 backdrop-blur-[20px] border border-white/15 rounded-[24px] p-4 xl:p-6 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]">
+          <header className="flex xl:block items-center justify-between">
+            <div>
+              <h1 className="text-2xl xl:text-4xl font-black tracking-tighter italic uppercase text-transparent bg-clip-text bg-gradient-to-r from-[#f1f500] to-white">
+                PAC-NEO
+              </h1>
+              <p className="text-white/40 font-mono text-[8px] xl:text-[9px] uppercase tracking-[0.3em] mt-1">Next Gen Arcade</p>
+            </div>
+            
+            <div className="xl:hidden flex gap-4">
+              <div className="text-right">
+                <p className="text-[10px] uppercase tracking-[1px] text-white/50">Score</p>
+                <p className="text-xl font-mono font-bold">{score.toLocaleString()}</p>
+              </div>
+            </div>
           </header>
 
-          <div className="space-y-6">
+          <div className="hidden xl:block space-y-6 mt-6">
             <div>
               <p className="text-[11px] uppercase tracking-[2px] text-white/50 mb-1">Score</p>
               <p className="text-3xl font-mono font-bold text-white tabular-nums drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">
@@ -387,7 +396,7 @@ export default function App() {
           </div>
         </div>
 
-        <div className="bg-white/10 backdrop-blur-[20px] border border-white/15 rounded-[24px] p-6 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] mt-auto">
+        <div className="bg-white/10 backdrop-blur-[20px] border border-white/15 rounded-[24px] p-4 xl:p-6 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] mt-auto hidden xl:block">
           <div className="flex flex-col items-center gap-4">
             <p className="text-[11px] uppercase tracking-[2px] text-white/50">Controls</p>
             <div className="flex flex-col gap-2 scale-90">
@@ -405,23 +414,35 @@ export default function App() {
       </aside>
 
       {/* Main Game Viewport */}
-      <main className="flex-1 relative flex items-center justify-center p-10">
+      <main className="flex-1 relative flex flex-col items-center justify-center p-2 xl:p-10 overflow-hidden">
+        {/* Mobile Stats Bar */}
+        <div className="xl:hidden flex gap-2 mb-2 w-full justify-center">
+          <div className="bg-white/5 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 flex flex-col items-center shrink-0">
+             <p className="text-[8px] uppercase tracking-wider text-white/40 leading-none">Lives</p>
+             <div className="flex gap-1.5 mt-1">
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <div key={i} className={`w-3 h-3 rounded-full ${i < lives ? "bg-[#f1f500]" : "bg-white/10"}`} style={{ clipPath: 'polygon(100% 0, 100% 40%, 50% 50%, 100% 60%, 100% 100%, 0 100%, 0 0)' }} />
+                ))}
+             </div>
+          </div>
+        </div>
+
         {/* Background Decorative Rings */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border border-white/5 rounded-full pointer-events-none" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] border border-white/5 rounded-full pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] xl:w-[800px] xl:h-[800px] border border-white/5 rounded-full pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] xl:w-[1000px] xl:h-[1000px] border border-white/5 rounded-full pointer-events-none" />
 
         <motion.div 
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="relative"
+          className="relative scale-[0.65] xs:scale-75 sm:scale-90 md:scale-100"
         >
           {/* Maze Container */}
-          <div className="relative p-6 bg-black/40 border-4 border-[#00d2ff] rounded-xl shadow-[0_0_40px_rgba(0,210,255,0.2)]">
+          <div className="relative p-2 xl:p-6 bg-black/40 border-2 xl:border-4 border-[#00d2ff] rounded-xl shadow-[0_0_40px_rgba(0,210,255,0.2)]">
             <canvas
               ref={canvasRef}
               width={GRID_WIDTH * CELL_SIZE}
               height={GRID_HEIGHT * CELL_SIZE}
-              className="block"
+              className="block max-h-[60vh] xl:max-h-none h-auto w-auto"
             />
 
             <AnimatePresence>
@@ -430,57 +451,57 @@ export default function App() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/80 backdrop-blur-md p-8 text-center rounded-lg"
+                  className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/90 backdrop-blur-md p-6 xl:p-8 text-center rounded-lg"
                 >
                   {gameState === 'START' && (
-                    <motion.div key="start" className="space-y-8">
-                      <div className="w-24 h-24 bg-[#f1f500]/10 rounded-full flex items-center justify-center mx-auto border border-[#f1f500]/20 animate-pulse">
-                        <Play size={48} className="text-[#f1f500] fill-[#f1f500]" />
+                    <motion.div key="start" className="space-y-6 xl:space-y-8">
+                      <div className="w-16 h-16 xl:w-24 xl:h-24 bg-[#f1f500]/10 rounded-full flex items-center justify-center mx-auto border border-[#f1f500]/20 animate-pulse">
+                        <Play size={32} className="text-[#f1f500] fill-[#f1f500] xl:w-12 xl:h-12" />
                       </div>
-                      <div className="space-y-2">
-                        <h2 className="text-4xl font-black uppercase tracking-tighter italic">Ready to Protocol?</h2>
-                        <p className="text-white/40 text-sm max-w-[280px] mx-auto leading-relaxed">
+                      <div className="space-y-1 xl:space-y-2">
+                        <h2 className="text-2xl xl:text-4xl font-black uppercase tracking-tighter italic">Ready to Protocol?</h2>
+                        <p className="text-white/40 text-[10px] xl:text-sm max-w-[280px] mx-auto leading-relaxed">
                           Navigate the cyber-grid. Harvest energy nodes. Avoid the system trackers.
                         </p>
                       </div>
                       <button 
                         onClick={startGame}
-                        className="group relative px-12 py-5 bg-[#f1f500] text-[#0f0c29] font-black uppercase tracking-tight overflow-hidden rounded-[20px] hover:scale-105 active:scale-95 transition-all shadow-[0_0_20px_rgba(241,245,0,0.5)]"
+                        className="group relative px-8 xl:px-12 py-3 xl:py-5 bg-[#f1f500] text-[#0f0c29] font-black uppercase tracking-tight overflow-hidden rounded-[20px] hover:scale-105 active:scale-95 transition-all shadow-[0_0_20px_rgba(241,245,0,0.5)]"
                       >
-                        <span className="relative z-10 flex items-center gap-3">Initialize Sequence <Star size={20} className="fill-[#0f0c29]" /></span>
+                        <span className="relative z-10 flex items-center gap-2 xl:gap-3 text-sm xl:text-base">Initialize Sequence <Star size={16} className="fill-[#0f0c29] xl:w-5 xl:h-5" /></span>
                         <div className="absolute inset-0 bg-white/30 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
                       </button>
                     </motion.div>
                   )}
 
                   {gameState === 'GAMEOVER' && (
-                    <motion.div key="gameover" className="space-y-8">
-                      <Skull size={80} className="text-[#ff00c1] mx-auto drop-shadow-[0_0_20px_rgba(255,0,193,0.6)]" />
+                    <motion.div key="gameover" className="space-y-6 xl:space-y-8">
+                      <Skull size={60} className="text-[#ff00c1] mx-auto drop-shadow-[0_0_20px_rgba(255,0,193,0.6)] xl:w-20 xl:h-20" />
                       <div>
-                        <h2 className="text-5xl font-black uppercase tracking-tighter italic text-[#ff00c1] mb-2">Protocol Terminated</h2>
-                        <p className="text-white/40 text-sm uppercase font-mono tracking-widest">System Integrity Compromised | Score: {score}</p>
+                        <h2 className="text-3xl xl:text-5xl font-black uppercase tracking-tighter italic text-[#ff00c1] mb-1 xl:mb-2">Protocol Terminated</h2>
+                        <p className="text-white/40 text-[10px] xl:text-sm uppercase font-mono tracking-widest leading-tight text-center">System Integrity Compromised<br/>Score: {score}</p>
                       </div>
                       <button 
                         onClick={startGame}
-                        className="flex items-center gap-3 px-10 py-4 bg-white/10 border border-white/20 text-white font-bold uppercase tracking-tight rounded-full hover:bg-white/20 transition-all mx-auto backdrop-blur-sm"
+                        className="flex items-center gap-2 xl:gap-3 px-8 py-3 xl:px-10 xl:py-4 bg-white/10 border border-white/20 text-white font-bold uppercase tracking-tight rounded-full hover:bg-white/20 transition-all mx-auto backdrop-blur-sm text-sm xl:text-base"
                       >
-                        <RotateCcw size={20} /> Reboot System
+                        <RotateCcw size={18} className="xl:w-5 xl:h-5" /> Reboot System
                       </button>
                     </motion.div>
                   )}
 
                   {gameState === 'WON' && (
-                    <motion.div key="won" className="space-y-8">
-                      <Trophy size={80} className="text-[#39ff14] mx-auto drop-shadow-[0_0_20px_rgba(57,255,20,0.6)]" />
+                    <motion.div key="won" className="space-y-6 xl:space-y-8">
+                      <Trophy size={60} className="text-[#39ff14] mx-auto drop-shadow-[0_0_20px_rgba(57,255,20,0.6)] xl:w-20 xl:h-20" />
                       <div>
-                        <h2 className="text-5xl font-black uppercase tracking-tighter italic text-[#39ff14] mb-2">Network Breached</h2>
-                        <p className="text-white/40 text-sm uppercase font-mono tracking-widest">Energy Extraction Complete | Score: {score}</p>
+                        <h2 className="text-3xl xl:text-5xl font-black uppercase tracking-tighter italic text-[#39ff14] mb-1 xl:mb-2">Network Breached</h2>
+                        <p className="text-white/40 text-[10px] xl:text-sm uppercase font-mono tracking-widest text-center">Energy Extraction Complete<br/>Score: {score}</p>
                       </div>
                       <button 
                         onClick={startGame}
-                        className="flex items-center gap-3 px-10 py-4 bg-[#39ff14] text-black font-bold uppercase tracking-tight rounded-full hover:bg-[#34e312] transition-colors mx-auto"
+                        className="flex items-center gap-2 xl:gap-3 px-8 py-3 xl:px-10 xl:py-4 bg-[#39ff14] text-black font-bold uppercase tracking-tight rounded-full hover:bg-[#34e312] transition-colors mx-auto text-sm xl:text-base"
                       >
-                        <RotateCcw size={20} /> Next Level
+                        <RotateCcw size={18} className="xl:w-5 xl:h-5" /> Next Level
                       </button>
                     </motion.div>
                   )}
@@ -489,6 +510,37 @@ export default function App() {
             </AnimatePresence>
           </div>
         </motion.div>
+
+        {/* Mobile D-Pad Controls */}
+        <div className="xl:hidden grid grid-cols-3 gap-2 mt-4 z-10 scale-90">
+          <div />
+          <button 
+            className="w-12 h-12 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl flex items-center justify-center active:bg-[#f1f500] active:text-black transition-all shadow-lg active:scale-95 touch-none"
+            onTouchStart={(e) => { e.preventDefault(); pacmanRef.current.nextDir = 'UP'; }}
+          >
+            <ChevronUp size={28} />
+          </button>
+          <div />
+          
+          <button 
+            className="w-12 h-12 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl flex items-center justify-center active:bg-[#f1f500] active:text-black transition-all shadow-lg active:scale-95 touch-none"
+            onTouchStart={(e) => { e.preventDefault(); pacmanRef.current.nextDir = 'LEFT'; }}
+          >
+            <ChevronLeft size={28} />
+          </button>
+          <button 
+            className="w-12 h-12 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl flex items-center justify-center active:bg-[#f1f500] active:text-black transition-all shadow-lg active:scale-95 touch-none"
+            onTouchStart={(e) => { e.preventDefault(); pacmanRef.current.nextDir = 'DOWN'; }}
+          >
+            <ChevronDown size={28} />
+          </button>
+          <button 
+            className="w-12 h-12 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl flex items-center justify-center active:bg-[#f1f500] active:text-black transition-all shadow-lg active:scale-95 touch-none"
+            onTouchStart={(e) => { e.preventDefault(); pacmanRef.current.nextDir = 'RIGHT'; }}
+          >
+            <ChevronRight size={28} />
+          </button>
+        </div>
       </main>
     </div>
   );
