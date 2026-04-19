@@ -335,20 +335,31 @@ export default function App() {
     <div className="h-screen w-screen bg-[#0f0c29] bg-[linear-gradient(135deg,#0f0c29_0%,#302b63_50%,#24243e_100%)] text-white font-sans selection:bg-[#00d2ff]/30 flex flex-col xl:flex-row overflow-hidden fixed inset-0">
       
       {/* Sidebar - Stats & Controls (Desktop) / Header (Mobile) */}
-      <aside className="w-full xl:w-[320px] h-auto xl:h-full flex flex-col p-4 xl:p-10 gap-4 xl:gap-6 z-10 shrink-0">
-        <div className="bg-white/10 backdrop-blur-[20px] border border-white/15 rounded-[24px] p-4 xl:p-6 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]">
+      <aside className="w-full xl:w-[320px] h-auto xl:h-full flex flex-col p-2 xl:p-10 gap-4 xl:gap-6 z-10 shrink-0">
+        <div className="bg-white/10 backdrop-blur-[20px] border border-white/15 rounded-xl xl:rounded-[24px] p-3 xl:p-6 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]">
           <header className="flex xl:block items-center justify-between">
             <div>
-              <h1 className="text-2xl xl:text-4xl font-black tracking-tighter italic uppercase text-transparent bg-clip-text bg-gradient-to-r from-[#f1f500] to-white">
+              <h1 className="text-xl xl:text-4xl font-black tracking-tighter italic uppercase text-transparent bg-clip-text bg-gradient-to-r from-[#f1f500] to-white">
                 PAC-NEO
               </h1>
-              <p className="text-white/40 font-mono text-[8px] xl:text-[9px] uppercase tracking-[0.3em] mt-1">Next Gen Arcade</p>
+              <p className="text-white/40 font-mono text-[7px] xl:text-[9px] uppercase tracking-[0.3em] mt-0.5 xl:mt-1">Next Gen Arcade</p>
             </div>
             
-            <div className="xl:hidden flex gap-4">
-              <div className="text-right">
-                <p className="text-[10px] uppercase tracking-[1px] text-white/50">Score</p>
-                <p className="text-xl font-mono font-bold">{score.toLocaleString()}</p>
+            <div className="xl:hidden flex items-center gap-4">
+              <div className="text-right flex items-center gap-3">
+                <div className="flex flex-col">
+                  <p className="text-[8px] uppercase tracking-[1px] text-white/50 leading-none mb-1">Score</p>
+                  <p className="text-lg font-mono font-bold leading-none">{score.toLocaleString()}</p>
+                </div>
+                <div className="h-6 w-px bg-white/10" />
+                <div className="flex flex-col items-center">
+                  <p className="text-[8px] uppercase tracking-[1px] text-white/50 leading-none mb-1">Lives</p>
+                  <div className="flex gap-1">
+                    {Array.from({ length: 3 }).map((_, i) => (
+                      <div key={i} className={`w-2.5 h-2.5 rounded-full ${i < lives ? "bg-[#f1f500]" : "bg-white/10"}`} style={{ clipPath: 'polygon(100% 0, 100% 40%, 50% 50%, 100% 60%, 100% 100%, 0 100%, 0 0)' }} />
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           </header>
@@ -383,7 +394,7 @@ export default function App() {
           </div>
         </div>
 
-        <div className="bg-white/10 backdrop-blur-[20px] border border-white/15 rounded-[24px] p-6 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]">
+        <div className="bg-white/10 backdrop-blur-[20px] border border-white/15 rounded-[24px] p-6 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] hidden xl:block">
           <div className="space-y-4">
              <div>
               <p className="text-[11px] uppercase tracking-[2px] text-white/50 mb-1">Current Map</p>
@@ -414,19 +425,9 @@ export default function App() {
       </aside>
 
       {/* Main Game Viewport */}
-      <main className="flex-1 relative flex flex-col items-center justify-center p-2 xl:p-10 overflow-hidden">
-        {/* Mobile Stats Bar */}
-        <div className="xl:hidden flex gap-2 mb-2 w-full justify-center">
-          <div className="bg-white/5 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 flex flex-col items-center shrink-0">
-             <p className="text-[8px] uppercase tracking-wider text-white/40 leading-none">Lives</p>
-             <div className="flex gap-1.5 mt-1">
-                {Array.from({ length: 3 }).map((_, i) => (
-                  <div key={i} className={`w-3 h-3 rounded-full ${i < lives ? "bg-[#f1f500]" : "bg-white/10"}`} style={{ clipPath: 'polygon(100% 0, 100% 40%, 50% 50%, 100% 60%, 100% 100%, 0 100%, 0 0)' }} />
-                ))}
-             </div>
-          </div>
-        </div>
-
+      <main className="flex-1 relative flex flex-col items-center justify-center p-1 xl:p-10 overflow-hidden">
+        {/* Mobile Stats Bar - Removed redundant bar, consolidated into header above */}
+        
         {/* Background Decorative Rings */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] xl:w-[800px] xl:h-[800px] border border-white/5 rounded-full pointer-events-none" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] xl:w-[1000px] xl:h-[1000px] border border-white/5 rounded-full pointer-events-none" />
